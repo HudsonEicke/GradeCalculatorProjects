@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace GradeCalculatorLibrary
 {
@@ -157,14 +158,11 @@ namespace GradeCalculatorLibrary
             Difficulty = difficulty;
         }
 
-        //NOT DONE
         public void SetScore(int assignmentNum, double score)
         {
             //if a template is used like an actual category
             if (Grades == null || _scoreSet == null)
                 return;
-
-            Grades[assignmentNum] = score;
 
             if(HasDrops)
             {
@@ -175,15 +173,24 @@ namespace GradeCalculatorLibrary
                 //if the score has not been set
                 if(!_scoreSet[assignmentNum])
                 {
+                    //set and add score
+                    Grades[assignmentNum] = score;
                     _scoreSet[assignmentNum] = true;
                     _obtainedScore += CalculateIdxScore(assignmentNum);
                     _enteredScoresCount++;
                 }
                 else //score has been set before
                 {
-                    RecalculateScore();
+                    //remove old score
+                    _obtainedScore -= CalculateIdxScore(assignmentNum);
+
+                    //add new score
+                    Grades[assignmentNum] = score;
+                    _obtainedScore += CalculateIdxScore(assignmentNum);
                 }
             }
+
+            FinalizeScoreChange();
         }
 
         //NOT DONE
@@ -197,6 +204,12 @@ namespace GradeCalculatorLibrary
             if (!_scoreSet[assignmentNum])
                 return;
 
+            if(!HasDrops)
+            {
+                //remove the old score
+                _obtainedScore -= CalculateIdxScore(assignmentNum);
+            }
+
             Grades[assignmentNum] = 0;
             _scoreSet[assignmentNum] = false;
             _enteredScoresCount--;
@@ -205,15 +218,49 @@ namespace GradeCalculatorLibrary
             {
                 //WHEN DROP LOGIC IS ADDED ADD THE CODE HERE
             }
+
+            FinalizeScoreChange();
+        }
+
+        //adds the amount to increase and updates the overall score
+        public void UpdateScore(int assignmentNum, double amountToIncrease)
+        {
+            //if a template is used like an actual category
+            if (Grades == null || _scoreSet == null)
+                return;
+
+            if (HasDrops)
+            {
+                //WHEN DROP LOGIC IS ADDED ADD THE CODE HERE
+            }
             else
             {
-                //recalculate obtained score
-                RecalculateScore();
+                //if the score has already been set
+                if (_scoreSet[assignmentNum])
+                {
+                    //remove old score
+                    _obtainedScore -= CalculateIdxScore(assignmentNum);
+
+                    //add new score
+                    Grades[assignmentNum] += amountToIncrease;
+                    _obtainedScore += CalculateIdxScore(assignmentNum);
+
+                }
+                else
+                {
+                    //set and add score
+                    Grades[assignmentNum] = amountToIncrease;
+                    _scoreSet[assignmentNum] = true;
+                    _obtainedScore += CalculateIdxScore(assignmentNum);
+                    _enteredScoresCount++;
+                }
             }
+
+            FinalizeScoreChange();
         }
 
         //NOT DONE
-        private void RecalculateScore()
+        public void RecalculateScore()
         {
             //if a template is used like an actual category
             if (_scoreSet == null)
@@ -251,73 +298,6 @@ namespace GradeCalculatorLibrary
             return (Grades[assignmentNum] / 100f) * _weightPerAssignment;
         }
 
-        //PROBABLY NEED TO REMOVE THIS CODE
-        private void CalculateDropIdxes()
-        {
-            //if a template is used like an actual category
-            if (_dropIdxes == null || Grades == null || _scoreSet == null)
-                return;
-
-            _dropIdxes.Clear();
-            int lowestIdx;
-            double lowestVal;
-
-            for (int i = 0; i < DropCount - (AssignmentCount - _enteredScoresCount); i++)
-            {
-                lowestIdx = -1;
-                lowestVal = double.MaxValue;
-
-                //if finding the first dropped value
-                if(i == 0)
-                {
-                    for (int j = 0; j < AssignmentCount; j++)
-                    {
-                        //if score is not set yet
-                        if (!_scoreSet[j])
-                            return;
-
-                        //checks if a new lowest value has been found
-                        if (Grades[j] < lowestVal)
-                        {
-                            lowestIdx = j;
-                            lowestVal = Grades[j];
-                        }
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < AssignmentCount; j++)
-                    {
-                        //if score is not set yet
-                        if (!_scoreSet[j])
-                            return;
-
-
-
-
-
-
-
-                        //!!!MAJOR PROBLEM WITH IF STATEMENT DOES NOT DO WHAT THE COMMENT SAYS!!!
-
-
-
-
-
-
-                        //prevents repeat indexes from being added
-                        if (Grades[j] < lowestVal && Grades[j] >= Grades[_dropIdxes[i - 1]])
-                        {
-                            lowestIdx = j;
-                            lowestVal = Grades[j];
-                        }
-                    }
-                }
-
-                _dropIdxes.Add(lowestIdx);
-            }
-        }
-
         public void ConvertToRealCategory()
         {
             //is already a real category
@@ -335,6 +315,12 @@ namespace GradeCalculatorLibrary
                 _weightPerAssignment = Weight / (AssignmentCount - DropCount);
             else
                 _weightPerAssignment = Weight / AssignmentCount;
+        }
+
+        //any logic that should take place after a score has been changed
+        private void FinalizeScoreChange()
+        {
+
         }
 
         //used for course template file building
