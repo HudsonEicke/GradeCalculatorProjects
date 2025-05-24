@@ -137,11 +137,6 @@ namespace GradeCalculatorLibrary
             //if not all letters are obtainable
             if (unEnteredCategories.Count == 0)
             {
-                for(int i = LetterGrades.Letters.Length - lettersObtained - 1; i >= 0; i--)
-                {
-                    scoreReports[i] = null;
-                }
-
                 return scoreReports;
             }
             //sorts the difficulties in ascending order
@@ -165,7 +160,7 @@ namespace GradeCalculatorLibrary
                     while (currVal <= 100)
                     {
                         //for each unentered grade
-                        for (int j = 0; j < missingGrades.Count(); j++)
+                        for (int j = 0; j < missingGrades.Count; j++)
                         {
                             //increase the index by PRECISION
                             Categories[idx].UpdateScore(missingGrades[j], _PRECISION);
@@ -201,7 +196,7 @@ namespace GradeCalculatorLibrary
                         currVal += _PRECISION;
                     }
 
-                    for (int j = 0; j < missingGrades.Count(); j++)
+                    for (int j = 0; j < missingGrades.Count; j++)
                     {
                         Categories[idx].SetScore(missingGrades[j], 100);
                     }
@@ -220,7 +215,7 @@ namespace GradeCalculatorLibrary
                     while (lettersObtained != LetterGrades.Letters.Count())
                     {
                         //for each unentered grade
-                        for (int j = 0; j < missingGrades.Count(); j++)
+                        for (int j = 0; j < missingGrades.Count; j++)
                         {
                             //increase the index by PRECISION
                             Categories[idx].UpdateScore(missingGrades[j], _PRECISION);

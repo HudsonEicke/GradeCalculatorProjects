@@ -351,10 +351,10 @@ namespace GradeCalculatorLibrary
             return AssignmentCount == _enteredScoresCount;
         }
 
-        public List<int> ? GetUnenteredIdxes()
+        public List<int> GetUnenteredIdxes()
         {
             if (_scoreSet == null)
-                return null;
+                return new List<int>();
 
             List<int> unenteredIdx = new List<int>();
 
