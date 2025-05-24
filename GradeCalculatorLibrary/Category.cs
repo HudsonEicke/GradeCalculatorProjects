@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace GradeCalculatorLibrary
 {
@@ -31,7 +30,7 @@ namespace GradeCalculatorLibrary
 
         //used for the case that we are loading a course template file category templates have the following structure
         //AssignmentName|AssignmentWeight|AssignmentCount|HasDrop|if true DropCount|Difficulty
-        public Category(string categoryTemplate)
+        public Category(string ? categoryTemplate)
         {
             string[] categoryTokens = categoryTemplate.Split('|');
 
@@ -158,11 +157,15 @@ namespace GradeCalculatorLibrary
             Difficulty = difficulty;
         }
 
-        public void SetScore(int assignmentNum, double score)
+        public bool SetScore(int assignmentNum, double score)
         {
             //if a template is used like an actual category
             if (Grades == null || _scoreSet == null)
-                return;
+                return false;
+
+            //if invalid assignment num
+            if (assignmentNum < 0 || assignmentNum >= AssignmentCount)
+                return false;
 
             if(HasDrops)
             {
@@ -191,18 +194,23 @@ namespace GradeCalculatorLibrary
             }
 
             FinalizeScoreChange();
+
+            return true;
         }
 
-        //NOT DONE
-        public void ResetScore(int assignmentNum)
+        public bool ResetScore(int assignmentNum)
         {
             //if a template is used like an actual category
             if (Grades == null || _scoreSet == null)
-                return;
+                return false;
+
+            //if invalid assignment num
+            if (assignmentNum < 0 || assignmentNum >= AssignmentCount)
+                return false;
 
             //if the score has not been set yet
             if (!_scoreSet[assignmentNum])
-                return;
+                return true;
 
             if(!HasDrops)
             {
@@ -220,14 +228,20 @@ namespace GradeCalculatorLibrary
             }
 
             FinalizeScoreChange();
+
+            return true;
         }
 
         //adds the amount to increase and updates the overall score
-        public void UpdateScore(int assignmentNum, double amountToIncrease)
+        public bool UpdateScore(int assignmentNum, double amountToIncrease)
         {
             //if a template is used like an actual category
             if (Grades == null || _scoreSet == null)
-                return;
+                return false;
+
+            //if invalid assignment num
+            if (assignmentNum < 0 || assignmentNum >= AssignmentCount)
+                return false;
 
             if (HasDrops)
             {
@@ -257,9 +271,10 @@ namespace GradeCalculatorLibrary
             }
 
             FinalizeScoreChange();
+
+            return true;
         }
 
-        //NOT DONE
         public void RecalculateScore()
         {
             //if a template is used like an actual category
@@ -284,8 +299,7 @@ namespace GradeCalculatorLibrary
                 }
             }
 
-            //used to speed up the drop case
-            _lastRecalculateAssignmentCount = _enteredScoresCount;
+            FinalizeScoreChange();
         }
 
         //calculates the score of the given index
@@ -321,6 +335,34 @@ namespace GradeCalculatorLibrary
         private void FinalizeScoreChange()
         {
 
+        }
+
+        //checks if the max score has been obtained
+        public bool AtMaxWeight()
+        {
+            return _obtainedScore == Weight;
+        }
+
+        //checks if all grades have been filled
+        public bool AllEntered()
+        {
+            return AssignmentCount == _enteredScoresCount;
+        }
+
+        public List<int> ? GetUnenteredIdxes()
+        {
+            if (_scoreSet == null)
+                return null;
+
+            List<int> unenteredIdx = new List<int>();
+
+            for(int i = 0; i < AssignmentCount; i++)
+            {
+                if (!_scoreSet[i])
+                    unenteredIdx.Add(i);
+            }
+
+            return unenteredIdx;
         }
 
         //used for course template file building

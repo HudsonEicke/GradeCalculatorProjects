@@ -9,7 +9,7 @@ namespace GradeCalculatorLibrary
     public abstract class Course
     {
         public string ? CourseName { get; protected set; }
-        public LetterGradeSet ? LetterGrades { get; private set; }
+        public LetterGradeSet ? LetterGrades { get; protected set; }
         public List<Category> Categories { get; private set; }
 
         public Course()

@@ -24,8 +24,14 @@ namespace GradeCalculatorLibrary
         }
 
         //using 2 strings
-        public LetterGradeSet(string letters, string letterScores)
+        public LetterGradeSet(string ? letters, string ? letterScores)
         {
+            if (letters == null)
+                letters = "";
+
+            if (letterScores == null)
+                letterScores = "";
+
             Letters = letters.Split('|');
 
             //prepares the letter scores to be converted
