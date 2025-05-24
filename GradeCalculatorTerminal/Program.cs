@@ -1,6 +1,7 @@
 ﻿//maybe add something to show that a score was calculated
 
 using GradeCalculatorLibrary;
+using System;
 
 namespace GradeCalculatorTerminal
 {
@@ -27,15 +28,443 @@ namespace GradeCalculatorTerminal
             {
                 Directory.CreateDirectory(@"Templates\CourseTemplates");
             }
+
             //end of first time setup
+            Console.WriteLine("Grade Calculator written by Hudson Eicke");
+            Console.WriteLine("!!!WARNING!!!");
+            Console.WriteLine("THIS CODE MAY NOT BE PERFECT AND COULD HAVE SOME OVERSITES THAT I DID NOT ACCOUNT FOR");
+            Console.WriteLine("However it has worked for every case I have given it :)\n");
 
+            Menu();
 
-            CalculateGrade();
+            Console.WriteLine("Thank you for using Grade Calculator I hope I was helpful");
+            Console.WriteLine("I hope you get the grade you want :)");
         }
 
-        static void CreateTemplateFile()
+        static void Menu()
         {
+            string input = "";
 
+            while(input != "exit")
+            {
+                Console.Write("Enter 1 for creating a course template file 2 for creating a letter grade template file 3 for calculating a required grades from a course template file or exit to exit the grade calculator: ");
+                input = Console.ReadLine();
+
+                switch(input)
+                {
+                    case "exit":
+                        return;
+
+                    case "1":
+                        CreateCourseTemplate();
+                        break;
+
+                    case "2":
+                        CreateLetterGradeTemplateFile();
+                        break;
+
+                    case "3":
+                        CalculateGrade();
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid input please try again");
+                        break;
+                }
+            }
+        }
+
+        static void CreateLetterGradeTemplateFile()
+        {
+            int inputInt;
+            string input;
+            Console.Write("Enter the name for the new letter grade template: ");
+            input = Console.ReadLine();
+
+            LetterGradeSet letterGradeSet = DefaultLetterEnterMode();
+
+            string letterGradeTemplateFileName = input + ".txt";
+
+            string newCourseLocation = Path.Combine(TEMPLATEFILEPATH, LETTERTEMPLATEFILENAME, letterGradeTemplateFileName);
+
+            while (File.Exists(newCourseLocation))
+            {
+                Console.WriteLine($"You already have a template for a letter grade template named {input}");
+                Console.Write("Would you like to 1 rename the current letter grade template or 2 overwrite the other letter grade template?: ");
+                input = Console.ReadLine();
+
+                while (!int.TryParse(input, out inputInt) || inputInt < 1 || inputInt > 2)
+                {
+                    Console.WriteLine("Invalid input please try again");
+                    Console.Write("Would you like to 1 rename the current letter grade template or 2 overwrite the other letter grade template?: ");
+                    input = Console.ReadLine();
+                }
+
+                if (input == "1")
+                {
+                    Console.Write("Enter the new name of the letter grade template: ");
+                    input = Console.ReadLine();
+                    letterGradeTemplateFileName = input + ".txt";
+                    newCourseLocation = Path.Combine(TEMPLATEFILEPATH, LETTERTEMPLATEFILENAME, letterGradeTemplateFileName);
+                }
+                else
+                    break;
+            }
+
+            //writes the letter grade template to a file
+            using (StreamWriter templateFile = new StreamWriter(newCourseLocation))
+            {
+                templateFile.WriteLine(letterGradeSet);
+                templateFile.Close();
+            }
+        }
+
+        static void CreateCourseTemplate()
+        {
+            string input;
+            int inputInt;
+
+            Console.Write("Enter the name of the course: ");
+            input = Console.ReadLine();
+
+            CourseTemplate course = new CourseTemplate(input);
+
+            Console.Write("Enter 1 if you want enter grades normally or 2 if you want to use a letter grade template file?: ");
+            input = Console.ReadLine();
+
+            while (!int.TryParse(input, out inputInt) || inputInt < 1 || inputInt > 2)
+            {
+                Console.WriteLine("Invalid selection please try again");
+                Console.Write("Enter 1 if you want enter letter grades normally or 2 if you want to use a letter grade template file?: ");
+                input = Console.ReadLine();
+            }
+
+            if (inputInt == 1)
+            {
+                course.SetLetterGrade(DefaultLetterEnterMode());
+            }
+            else if (inputInt == 2)
+            {
+                course.SetLetterGrade(FileEnterLetterEnterMode());
+            }
+
+            Console.Write("How many categories are in the class?: ");
+            input = Console.ReadLine();
+
+            //gets how many categories are in the class
+            int categoryCount = 1;
+
+            while (!int.TryParse(input, out categoryCount) || categoryCount < 1)
+            {
+                if(categoryCount < 1)
+                {
+                    Console.WriteLine("A course must have at least 1 category");
+                    categoryCount = 1;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input please try again");
+                }
+
+                Console.Write("How many categories are in the class?: ");
+                input = Console.ReadLine();
+            }
+
+            //reads in all the categories
+            string categoryName;
+            double categoryWeight;
+            int assignmentCount = 1;
+
+            Console.WriteLine("Now you will enter the information about the categories in the class");
+            Console.WriteLine("When asked about a categories weight enter it in percentage form");
+            Console.WriteLine("Example: if a category has a weight of 48% enter 48");
+
+            for (int i = 0; i < categoryCount; i++)
+            {
+                //gets the category name
+                Console.Write("Enter the name of the category: ");
+                categoryName = Console.ReadLine();
+
+                while (categoryName.Contains('|'))
+                {
+                    Console.WriteLine("Category names cannot contain the | character");
+                    Console.Write("Enter the name of the category: ");
+                    categoryName = Console.ReadLine();
+                }
+
+                //gets the weight of the category
+                Console.Write($"Enter the weight of {categoryName}: ");
+                input = Console.ReadLine();
+
+                while (!double.TryParse(input, out categoryWeight))
+                {
+                    Console.WriteLine("Invalid input please try again");
+                    Console.Write($"Enter the weight of {categoryName}: ");
+                    input = Console.ReadLine();
+                }
+
+                //gets how many assignments the category has
+                Console.Write("How many assignments does the category have?: ");
+                input = Console.ReadLine();
+
+                while(!int.TryParse(input, out assignmentCount) || assignmentCount < 1)
+                {
+                    if(assignmentCount < 1)
+                    {
+                        Console.WriteLine("A category must have at least 1 assignment");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input please try again");
+                    }
+
+                    Console.Write("How many assignments does the category have?: ");
+                    input = Console.ReadLine();
+                }
+
+                //gets if the category has drops
+                bool hasDrops;
+
+                Console.Write("Does the category have dropped assignments? (y/n): ");
+                input = Console.ReadLine();
+                input = input.ToLower();
+
+                while(input != "y" && input != "n")
+                {
+                    Console.WriteLine("Invalid input please try again");
+                    Console.Write("Does the category have dropped assignments? (y/n): ");
+                    input = Console.ReadLine();
+                    input = input.ToLower();
+                }
+
+                //gets the drop count of the category if it has any
+                int dropCount = 1;
+
+                if (input == "y")
+                {
+                    hasDrops = true;
+
+                    Console.Write("How many drops does the category have?: ");
+                    input = Console.ReadLine();
+
+                    while (!int.TryParse(input, out dropCount) || dropCount < 1)
+                    {
+                        if (dropCount < 1)
+                        {
+                            Console.WriteLine("A category with drops must have at least 1 drop");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input please try again");
+                        }
+
+                        Console.Write("How many drops does the category have?: ");
+                        input = Console.ReadLine();
+                    }
+                }
+                else
+                    hasDrops = false;
+
+                //gets the difficulty of the category
+                int difficulty;
+
+                Console.Write("What is the difficulty of the category? (Higher value means more difficult): ");
+                input = Console.ReadLine();
+
+                while (!int.TryParse(input, out difficulty))
+                {
+                    Console.WriteLine("Invalid input please try again");
+                    Console.Write("What is the difficulty of the category? (Higher value means more difficult): ");
+                    input = Console.ReadLine();
+                }
+
+                //creates the category
+                course.AddCategory(new Category(categoryName, categoryWeight, assignmentCount, hasDrops, dropCount, difficulty));
+                Console.WriteLine();
+            }
+
+            //prepares to write the course
+            string courseTemplateFileName = course.CourseName + ".txt";
+
+            string newCourseLocation = Path.Combine(TEMPLATEFILEPATH, COURSETEMPLATEFILENAME, courseTemplateFileName);
+
+            while (File.Exists(newCourseLocation))
+            {
+                Console.WriteLine($"You already have a template for a course named {course.CourseName}");
+                Console.Write("Would you like to 1 rename the current course or 2 overwrite the other course?: ");
+                input = Console.ReadLine();
+
+                while(!int.TryParse(input, out inputInt) || inputInt < 1 || inputInt > 2)
+                {
+                    Console.WriteLine("Invalid input please try again");
+                    Console.Write("Would you like to 1 rename the current course or 2 overwrite the other course?: ");
+                    input = Console.ReadLine();
+                }
+
+                if (input == "1")
+                {
+                    Console.Write("Enter the new name of the course: ");
+                    input = Console.ReadLine();
+                    course.SetCourseName(input);
+                    courseTemplateFileName = course.CourseName + ".txt";
+                    newCourseLocation = Path.Combine(TEMPLATEFILEPATH, COURSETEMPLATEFILENAME, courseTemplateFileName);
+                }
+                else
+                    break;
+            }
+
+            //writes the course template to a file
+
+            using (StreamWriter templateFile = new StreamWriter(newCourseLocation))
+            {
+                templateFile.WriteLine(course.GetTemplateFile());
+                templateFile.Close();
+            }
+        }
+
+        static LetterGradeSet DefaultLetterEnterMode()
+        {
+            string input = "";
+            double inputDouble;
+            List<string> letters = new List<string>();
+            double[] letterScores;
+
+            //gets all of the letters for the course
+            Console.WriteLine("When you are asked to enter letters enter them in decending order of score");
+            Console.WriteLine("Example: A B C...");
+            while (letters.Count == 0)
+            {
+                while (input != "0")
+                {
+                    Console.Write("Enter a letter(0 to stop): ");
+                    input = Console.ReadLine();
+
+                    if (input.Contains('|'))
+                    {
+                        Console.WriteLine("A letter grade cannot contain the | character");
+                    }
+                    else if (input != "0")
+                    {
+                        letters.Add(input);
+                    }
+                }
+
+                if (letters.Count == 0)
+                {
+                    Console.WriteLine("A course needs at least 1 letter in it");
+                }
+
+                input = "";
+            }
+
+            //gets the scores for those letters
+            Console.WriteLine("Now you will enter the score required to get each letter");
+            Console.WriteLine("Enter these values in percentage form");
+            Console.WriteLine("Example: if it takes a 90% to get an A enter 90");
+
+            letterScores = new double[letters.Count];
+
+            for (int i = 0; i < letters.Count; i++)
+            {
+                Console.Write($"Enter the percent needed for {letters[i]}: ");
+                input = Console.ReadLine();
+
+                while (!double.TryParse(input, out inputDouble))
+                {
+                    Console.WriteLine("Invalid value entered please try again");
+                    Console.Write($"Enter the percent needed for {letters[i]}: ");
+                    input = Console.ReadLine();
+                }
+
+                letterScores[i] = inputDouble;
+            }
+
+            return new LetterGradeSet(letters.ToArray(), letterScores);
+        }
+
+        static LetterGradeSet FileEnterLetterEnterMode()
+        {
+            string[] templates = Directory.GetFiles(Path.Combine(TEMPLATEFILEPATH, LETTERTEMPLATEFILENAME));
+            char[] delims = { '.', '\\' };
+            string? input;
+            int fileIdx;
+
+            if (templates.Length == 0)
+            {
+                Console.WriteLine("You do not have any letter grade templates :(");
+                Console.WriteLine($"To use a letter grade template either create a template or if you already have one place it in {Path.Combine(TEMPLATEFILEPATH, LETTERTEMPLATEFILENAME)}");
+                Console.WriteLine("Starting standard letter enter mode");
+                return DefaultLetterEnterMode();
+            }
+
+            while (true)
+            {
+                Console.WriteLine("Which letter grade tempatle would you like to use?");
+
+                //displays course options
+                for (int i = 1; i <= templates.Length; i++)
+                {
+                    Console.WriteLine("[" + i + "] " + templates[i - 1].Split(delims)[2]);
+                }
+                Console.Write($"Enter a number from 1 to {templates.Length} or enter 0 to go to default enter mode: ");
+                input = Console.ReadLine();
+
+                if (input == "0")
+                {
+                    Console.WriteLine("Starting standard letter enter mode");
+                    return DefaultLetterEnterMode();
+                }
+
+                while (!int.TryParse(input, out fileIdx) || fileIdx < 1 || fileIdx > templates.Length)
+                {
+
+                    Console.WriteLine("Invalid template file chosen");
+                    Console.Write($"Enter a number from 1 to {templates.Length} or enter 0 to go to default enter mode: ");
+                    input = Console.ReadLine();
+
+                    if (input == "0")
+                    {
+                        Console.WriteLine("Starting standard letter enter mode");
+                        return DefaultLetterEnterMode();
+                    }
+                }
+
+                LetterGradeSet letterGradeSet;
+
+                try
+                {
+                    letterGradeSet = new LetterGradeSet(templates[fileIdx - 1]);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                    Console.WriteLine("Uh oh looks like the template file you chose is not setup correctly :(");
+                    continue;
+                }
+
+                for (int i = 0; i < letterGradeSet.Letters.Length; i++)
+                {
+                    Console.Write($"{letterGradeSet.Letters[i]} >= {double.Round(letterGradeSet.LetterScores[i], 2, MidpointRounding.AwayFromZero)}%");
+
+                    if (i != letterGradeSet.Letters.Length - 1)
+                        Console.Write(" | ");
+                }
+
+                Console.Write("\nThe template has the above values do you want to this tempalte? (y/n): ");
+                input = Console.ReadLine();
+                input = input.ToLower();
+
+                while(input != "y" && input != "n")
+                {
+                    Console.WriteLine("Invalid input please try again");
+                    Console.Write("The template has the above values do you want to this tempalte? (y/n): ");
+                    input = Console.ReadLine();
+                    input = input.ToLower();
+                }
+
+                if(input == "y")
+                    return letterGradeSet;
+            }
         }
 
         static void CalculateGrade()
@@ -111,6 +540,8 @@ namespace GradeCalculatorTerminal
 
             Console.WriteLine("\nPlease fill as many of the following grades in as you would like");
             Console.WriteLine("For any grades you want the calculator to estimate on just press enter instead of filling in a value");
+            Console.WriteLine("When entering grades enter them in percentage form");
+            Console.WriteLine("Example: if a someone got a 30/40 they should enter 75");
 
             //for each category
             for (int i = 0; i < course.Categories.Count(); i++)
