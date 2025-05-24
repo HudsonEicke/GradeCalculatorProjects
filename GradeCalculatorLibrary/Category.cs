@@ -26,7 +26,6 @@ namespace GradeCalculatorLibrary
         private int _enteredScoresCount = 0;
         private List<int> ? _dropIdxes;
         private double _weightPerAssignment;
-        private int _lastRecalculateAssignmentCount = 0;
 
         //used for the case that we are loading a course template file category templates have the following structure
         //AssignmentName|AssignmentWeight|AssignmentCount|HasDrop|if true DropCount|Difficulty
@@ -51,7 +50,7 @@ namespace GradeCalculatorLibrary
                 if (!double.TryParse(categoryTokens[1], out tempWeight))
                     throw new CategoryException("Invalid category: Invalid value in the weight field");
 
-                Weight = double.Round(tempWeight, 2);
+                Weight = double.Round(tempWeight, 2, MidpointRounding.AwayFromZero);
 
                 //parses the assignment count part of the template
                 int tempAssignmentCount;
@@ -92,7 +91,7 @@ namespace GradeCalculatorLibrary
                 if (!double.TryParse(categoryTokens[1], out tempWeight))
                     throw new CategoryException("Invalid category: Invalid value in the weight field");
 
-                Weight = double.Round(tempWeight, 2);
+                Weight = double.Round(tempWeight, 2, MidpointRounding.AwayFromZero);
 
                 //parses the assignment count part of the template
                 int tempAssignmentCount;

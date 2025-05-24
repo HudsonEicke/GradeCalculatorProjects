@@ -51,7 +51,7 @@ namespace GradeCalculatorLibrary
                     throw new LetterGradeException("Invalid letter score string: The letter scores may only be numbers");
 
                 //rounds number to 2 decimal places
-                LetterScores[i] = double.Round(LetterScores[i], 2);
+                LetterScores[i] = double.Round(LetterScores[i], 2, MidpointRounding.AwayFromZero);
             }
         }
 
@@ -100,7 +100,7 @@ namespace GradeCalculatorLibrary
                     throw new LetterGradeTemplateException("Invalid letter grade template file: The letter scores may only be numbers");
 
                 //rounds number to 2 decimal places
-                LetterScores[i] = double.Round(LetterScores[i], 2);
+                LetterScores[i] = double.Round(LetterScores[i], 2, MidpointRounding.AwayFromZero);
             }
         }
 

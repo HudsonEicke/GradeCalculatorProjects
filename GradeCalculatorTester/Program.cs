@@ -36,7 +36,11 @@ namespace GradeCalculatorTester
             
             Console.WriteLine(test.GetTemplateFile());
 
-
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(@"Templates\CourseTemplates\", "COP3402.txt")))
+            {
+                outputFile.WriteLine(test.GetTemplateFile());
+                outputFile.Close();
+            }
             //Console.WriteLine("LetterGradeSet unit test cases");
             //LetterGradeSetUnitTests();
         }

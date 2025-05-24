@@ -8,7 +8,9 @@ namespace GradeCalculatorLibrary
 {
     public class CourseCalculator : Course
     {
-        private const double PRECISION = 0.01f;
+        public double MaxScore { get; private set; }
+        public double TrueGrade { get; private set; }
+        private const double _PRECISION = 0.01;
 
 
         //builds a course from a template
@@ -43,6 +45,7 @@ namespace GradeCalculatorLibrary
                 {
                     currentLine = templateFileReader.ReadLine();
                     Categories.Add(new Category(currentLine));
+                    MaxScore += Categories[i].Weight;
                 }
             }
             catch (FileNotFoundException)
@@ -60,6 +63,8 @@ namespace GradeCalculatorLibrary
             if(!Categories[categoryNum].SetScore(assignmentNum, score))
                 return false;
 
+            UpdateTrueGrade();
+
             return true;
         }
 
@@ -68,10 +73,27 @@ namespace GradeCalculatorLibrary
             if (categoryNum < 0 || categoryNum >= Categories.Count())
                 return false;
 
+            UpdateTrueGrade();
+
             return Categories[categoryNum].ResetScore(assignmentNum);
         }
 
-        public ScoreReport[] CalculateNoDrops()
+        public ScoreReport[] Calculate()
+        {
+            return CalculateNoDrops();
+        }
+
+        private void UpdateTrueGrade()
+        {
+            TrueGrade = 0;
+
+            for (int i = 0; i < Categories.Count; i++)
+            {
+                TrueGrade += Categories[i].ObtainedScore;
+            }
+        }
+
+        private ScoreReport[] CalculateNoDrops()
         {
             List<(int categoryNum, int difficulty)> unEnteredCategories = new List<(int categoryNum, int difficulty)>();
             ScoreReport[] scoreReports = new ScoreReport[LetterGrades.Letters.Length];
@@ -122,7 +144,6 @@ namespace GradeCalculatorLibrary
 
                 return scoreReports;
             }
-
             //sorts the difficulties in ascending order
             unEnteredCategories.Sort((category1, category2) => category1.difficulty.CompareTo(category2.difficulty));
 
@@ -132,7 +153,7 @@ namespace GradeCalculatorLibrary
                 //get the idx of the category
                 int idx = unEnteredCategories[i].categoryNum;
 
-                double currVal = PRECISION;
+                double currVal = _PRECISION;
 
                 //check if we are not at the last category
                 if (i != unEnteredCategories.Count - 1)
@@ -147,7 +168,7 @@ namespace GradeCalculatorLibrary
                         for (int j = 0; j < missingGrades.Count(); j++)
                         {
                             //increase the index by PRECISION
-                            Categories[idx].UpdateScore(missingGrades[j], PRECISION);
+                            Categories[idx].UpdateScore(missingGrades[j], _PRECISION);
 
                             //see if a new letter is available
                             if (IsNewLetterAvailable(grade, lettersObtained, idx))
@@ -155,25 +176,34 @@ namespace GradeCalculatorLibrary
                                 //generate an updated category score report
                                 categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx]);
 
+                                int amtToAdd = 0;
+
                                 //gets all the new letters
-                                for (int k = LetterGrades.Letters.Count() - lettersObtained - 1; i >= 0; i--)
+                                for (int k = LetterGrades.Letters.Count() - lettersObtained - 1; k >= 0; k--)
                                 {
-                                    if (grade >= LetterGrades.LetterScores[k])
+                                    if (grade + Categories[idx].ObtainedScore >= LetterGrades.LetterScores[k])
                                     {
                                         scoreReports[k] = new ScoreReport(LetterGrades.Letters[k], categoryScoreReports);
-                                        lettersObtained++;
+                                        amtToAdd++;
                                     }
                                     else
                                         break;
                                 }
 
+                                lettersObtained += amtToAdd;
+                                
                                 //if all obtained
                                 if (lettersObtained == LetterGrades.Letters.Count())
                                     return scoreReports;
                             }
                         }
 
-                        currVal += PRECISION;
+                        currVal += _PRECISION;
+                    }
+
+                    for (int j = 0; j < missingGrades.Count(); j++)
+                    {
+                        Categories[idx].SetScore(missingGrades[j], 100);
                     }
 
                     Categories[idx].RecalculateScore();
@@ -187,13 +217,13 @@ namespace GradeCalculatorLibrary
                     List<int>? missingGrades = Categories[idx].GetUnenteredIdxes();
 
                     //runs until all letters are obtained
-                    while (lettersObtained == LetterGrades.Letters.Count())
+                    while (lettersObtained != LetterGrades.Letters.Count())
                     {
                         //for each unentered grade
                         for (int j = 0; j < missingGrades.Count(); j++)
                         {
                             //increase the index by PRECISION
-                            Categories[idx].UpdateScore(missingGrades[j], PRECISION);
+                            Categories[idx].UpdateScore(missingGrades[j], _PRECISION);
 
                             //see if a new letter is available
                             if (IsNewLetterAvailable(grade, lettersObtained, idx))
@@ -201,17 +231,21 @@ namespace GradeCalculatorLibrary
                                 //generate an updated category score report
                                 categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx]);
 
+                                int amtToAdd = 0;
+
                                 //gets all the new letters
-                                for (int k = LetterGrades.Letters.Count() - lettersObtained - 1; i >= 0; i--)
+                                for (int k = LetterGrades.Letters.Count() - lettersObtained - 1; k >= 0; k--)
                                 {
-                                    if (grade >= LetterGrades.LetterScores[k])
+                                    if (grade + Categories[idx].ObtainedScore >= LetterGrades.LetterScores[k])
                                     {
                                         scoreReports[k] = new ScoreReport(LetterGrades.Letters[k], categoryScoreReports);
-                                        lettersObtained++;
+                                        amtToAdd++;
                                     }
                                     else
                                         break;
                                 }
+
+                                lettersObtained += amtToAdd;
 
                                 //if all obtained
                                 if (lettersObtained == LetterGrades.Letters.Count())
@@ -234,7 +268,7 @@ namespace GradeCalculatorLibrary
             if(LetterGrades == null)
                 return false;
 
-            return currGrade + Categories[categoryIdx].ObtainedScore >= LetterGrades.LetterScores[LetterGrades.LetterScores.Length] - lettersObtained - 1;
+            return currGrade + Categories[categoryIdx].ObtainedScore >= LetterGrades.LetterScores[LetterGrades.LetterScores.Length - lettersObtained - 1];
         }
     }
 }
