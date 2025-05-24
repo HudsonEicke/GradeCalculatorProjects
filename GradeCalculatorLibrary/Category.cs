@@ -19,12 +19,12 @@ namespace GradeCalculatorLibrary
         public bool HasDrops { get; private set; }
         public int DropCount { get; private set; }
         public int Difficulty { get; private set; }
+        public double ObtainedScore { get; private set; } = 0;
 
         //private fields
         private bool[] ? _scoreSet;
         private int _enteredScoresCount = 0;
         private List<int> ? _dropIdxes;
-        private double _obtainedScore = 0;
         private double _weightPerAssignment;
         private int _lastRecalculateAssignmentCount = 0;
 
@@ -32,6 +32,9 @@ namespace GradeCalculatorLibrary
         //AssignmentName|AssignmentWeight|AssignmentCount|HasDrop|if true DropCount|Difficulty
         public Category(string ? categoryTemplate)
         {
+            if (categoryTemplate == null)
+                categoryTemplate = "";
+
             string[] categoryTokens = categoryTemplate.Split('|');
 
             if (categoryTokens.Length != 5 && categoryTokens.Length != 6)
@@ -179,17 +182,17 @@ namespace GradeCalculatorLibrary
                     //set and add score
                     Grades[assignmentNum] = score;
                     _scoreSet[assignmentNum] = true;
-                    _obtainedScore += CalculateIdxScore(assignmentNum);
+                    ObtainedScore += CalculateIdxScore(assignmentNum);
                     _enteredScoresCount++;
                 }
                 else //score has been set before
                 {
                     //remove old score
-                    _obtainedScore -= CalculateIdxScore(assignmentNum);
+                    ObtainedScore -= CalculateIdxScore(assignmentNum);
 
                     //add new score
                     Grades[assignmentNum] = score;
-                    _obtainedScore += CalculateIdxScore(assignmentNum);
+                    ObtainedScore += CalculateIdxScore(assignmentNum);
                 }
             }
 
@@ -215,7 +218,7 @@ namespace GradeCalculatorLibrary
             if(!HasDrops)
             {
                 //remove the old score
-                _obtainedScore -= CalculateIdxScore(assignmentNum);
+                ObtainedScore -= CalculateIdxScore(assignmentNum);
             }
 
             Grades[assignmentNum] = 0;
@@ -253,11 +256,11 @@ namespace GradeCalculatorLibrary
                 if (_scoreSet[assignmentNum])
                 {
                     //remove old score
-                    _obtainedScore -= CalculateIdxScore(assignmentNum);
+                    ObtainedScore -= CalculateIdxScore(assignmentNum);
 
                     //add new score
                     Grades[assignmentNum] += amountToIncrease;
-                    _obtainedScore += CalculateIdxScore(assignmentNum);
+                    ObtainedScore += CalculateIdxScore(assignmentNum);
 
                 }
                 else
@@ -265,7 +268,7 @@ namespace GradeCalculatorLibrary
                     //set and add score
                     Grades[assignmentNum] = amountToIncrease;
                     _scoreSet[assignmentNum] = true;
-                    _obtainedScore += CalculateIdxScore(assignmentNum);
+                    ObtainedScore += CalculateIdxScore(assignmentNum);
                     _enteredScoresCount++;
                 }
             }
@@ -287,7 +290,7 @@ namespace GradeCalculatorLibrary
             }
             else
             {
-                _obtainedScore = 0;
+                ObtainedScore = 0;
 
                 for(int i = 0; i < AssignmentCount; i++)
                 {
@@ -295,7 +298,7 @@ namespace GradeCalculatorLibrary
                     if (!_scoreSet[i])
                         continue;
 
-                    _obtainedScore += CalculateIdxScore(i);
+                    ObtainedScore += CalculateIdxScore(i);
                 }
             }
 
@@ -340,7 +343,7 @@ namespace GradeCalculatorLibrary
         //checks if the max score has been obtained
         public bool AtMaxWeight()
         {
-            return _obtainedScore == Weight;
+            return ObtainedScore >= Weight;
         }
 
         //checks if all grades have been filled
