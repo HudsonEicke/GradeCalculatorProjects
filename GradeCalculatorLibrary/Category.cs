@@ -24,8 +24,8 @@ namespace GradeCalculatorLibrary
         //private fields
         private bool[] ? _scoreSet;
         private int _enteredScoresCount = 0;
-        private List<int> ? _dropIdxes;
         private double _weightPerAssignment;
+        private List<int> _sortedScoreIdx;
 
         //used for the case that we are loading a course template file category templates have the following structure
         //AssignmentName|AssignmentWeight|AssignmentCount|HasDrop|if true DropCount|Difficulty
@@ -137,7 +137,7 @@ namespace GradeCalculatorLibrary
 
             //WHEN DROP LOGIC IS ADDED MAYBE REMOVE THIS CODE
             if (HasDrops)
-                _dropIdxes = new List<int>();
+                _sortedScoreIdx = new List<int>();
 
             if(HasDrops)
                 _weightPerAssignment = Weight / (AssignmentCount - DropCount);
@@ -171,7 +171,21 @@ namespace GradeCalculatorLibrary
 
             if(HasDrops)
             {
-                //WHEN DROP LOGIC IS ADDED ADD THE CODE HERE
+                Grades[assignmentNum] = score;
+
+                //if the score has not been set
+                if (!_scoreSet[assignmentNum])
+                {
+                    _scoreSet[assignmentNum] = true;
+                    _enteredScoresCount++;
+                }
+                else //score has been set before
+                {
+                    _sortedScoreIdx.Remove(assignmentNum);
+                }
+
+                SortedDropInsert(assignmentNum);
+                RecalculateScore();
             }
             else
             {
@@ -227,6 +241,8 @@ namespace GradeCalculatorLibrary
             if(HasDrops)
             {
                 //WHEN DROP LOGIC IS ADDED ADD THE CODE HERE
+                _sortedScoreIdx.Remove(assignmentNum);
+                RecalculateScore();
             }
 
             FinalizeScoreChange();
@@ -248,6 +264,7 @@ namespace GradeCalculatorLibrary
             if (HasDrops)
             {
                 //WHEN DROP LOGIC IS ADDED ADD THE CODE HERE
+                SetScore(assignmentNum, Grades[assignmentNum] + amountToIncrease);
             }
             else
             {
@@ -285,7 +302,12 @@ namespace GradeCalculatorLibrary
 
             if(HasDrops)
             {
-                //WHEN DROP LOGIC IS ADDED ADD THE CODE HERE
+                ObtainedScore = 0;
+
+                for(int i = 0; i < _enteredScoresCount && i < AssignmentCount - DropCount; i++)
+                {
+                    ObtainedScore += CalculateIdxScore(_sortedScoreIdx[i]);
+                }
             }
             else
             {
@@ -325,7 +347,7 @@ namespace GradeCalculatorLibrary
 
             //WHEN DROP LOGIC IS ADDED MAYBE REMOVE THIS CODE
             if (HasDrops)
-                _dropIdxes = new List<int>();
+                _sortedScoreIdx = new List<int>();
 
             if (HasDrops)
                 _weightPerAssignment = Weight / (AssignmentCount - DropCount);
@@ -366,6 +388,61 @@ namespace GradeCalculatorLibrary
 
             return unenteredIdx;
         }
+
+        public double GetLowestUndroppedScore()
+        {
+            if (!HasDrops)
+                return 0;
+
+            if (_enteredScoresCount < AssignmentCount - DropCount)
+                return 0;
+
+            return Grades[_sortedScoreIdx[AssignmentCount - DropCount - 1]];
+        }
+
+        private void SortedDropInsert(int idx)
+        {
+            for (int i = 0; i < _sortedScoreIdx.Count; i++)
+            {
+                if (Grades[idx] > Grades[_sortedScoreIdx[i]])
+                {
+                    _sortedScoreIdx.Insert(i, idx);
+                    return;
+                }
+            }
+            
+            _sortedScoreIdx.Add(idx);
+        }
+
+        public List<int> GetDropIndexes()
+        {
+            if(!HasDrops)
+                return new List<int>();
+
+            List<int> dropIndexes = new List<int>();
+
+            for(int i = AssignmentCount - DropCount; i < _enteredScoresCount; i++)
+            {
+                dropIndexes.Add(_sortedScoreIdx[i]);
+            }
+
+            int counter = _enteredScoresCount - (AssignmentCount - DropCount);
+
+            for(int i = 0; i < AssignmentCount; i++)
+            {
+                if (!_scoreSet[i])
+                {
+                    dropIndexes.Add(i);
+                    counter++;
+
+                    if(counter == DropCount)
+                        break;
+                }
+            }
+
+            return dropIndexes;
+        }
+            
 
         //used for course template file building
         public override string ToString()

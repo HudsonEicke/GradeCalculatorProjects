@@ -106,7 +106,7 @@ namespace GradeCalculatorLibrary
             {
                 //recalculates to get the most accurate grade
                 Categories[i].RecalculateScore();
-                categoryScoreReports[i] = new CategoryScoreReport(Categories[i]);
+                categoryScoreReports[i] = new CategoryScoreReport(Categories[i], new List<int>());
 
                 //check if any grades can be changed in the category
                 if (Categories[i].AllEntered())
@@ -139,6 +139,7 @@ namespace GradeCalculatorLibrary
             {
                 return scoreReports;
             }
+
             //sorts the difficulties in ascending order
             unEnteredCategories.Sort((category1, category2) => category1.difficulty.CompareTo(category2.difficulty));
 
@@ -150,12 +151,53 @@ namespace GradeCalculatorLibrary
 
                 double currVal = _PRECISION;
 
+                //gets the indexes that have not been filled yet
+                List<int>? missingGrades = Categories[idx].GetUnenteredIdxes();
+
+                if (Categories[idx].HasDrops)
+                {
+                    currVal = Categories[idx].GetLowestUndroppedScore();
+
+                    //for each unentered grade
+                    for (int j = 0; j < missingGrades.Count; j++)
+                    {
+                        //increase the index by PRECISION
+                        Categories[idx].SetScore(missingGrades[j], currVal);
+
+                        //see if a new letter is available
+                        if (IsNewLetterAvailable(grade, lettersObtained, idx))
+                        {
+                            //generate an updated category score report
+                            categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx], missingGrades);
+
+                            int amtToAdd = 0;
+
+                            //gets all the new letters
+                            for (int k = LetterGrades.Letters.Count() - lettersObtained - 1; k >= 0; k--)
+                            {
+                                if (grade + Categories[idx].ObtainedScore >= LetterGrades.LetterScores[k])
+                                {
+                                    scoreReports[k] = new ScoreReport(LetterGrades.Letters[k], categoryScoreReports);
+                                    amtToAdd++;
+                                }
+                                else
+                                    break;
+                            }
+
+                            lettersObtained += amtToAdd;
+
+                            //if all obtained
+                            if (lettersObtained == LetterGrades.Letters.Count())
+                                return scoreReports;
+                        }
+                    }
+
+                    currVal += _PRECISION;
+                }
+
                 //check if we are not at the last category
                 if (i != unEnteredCategories.Count - 1)
                 {
-                    //gets the indexes that have not been filled yet
-                    List<int> ? missingGrades = Categories[idx].GetUnenteredIdxes();
-
                     //runs for each value from 0 to 100 with an increment of PRECISION
                     while (currVal <= 100)
                     {
@@ -169,7 +211,7 @@ namespace GradeCalculatorLibrary
                             if (IsNewLetterAvailable(grade, lettersObtained, idx))
                             {
                                 //generate an updated category score report
-                                categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx]);
+                                categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx], missingGrades);
 
                                 int amtToAdd = 0;
 
@@ -204,13 +246,10 @@ namespace GradeCalculatorLibrary
                     Categories[idx].RecalculateScore();
 
                     //generate an updated category score report
-                    categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx]);
+                    categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx], missingGrades);
                 }
                 else
                 {
-                    //gets the indexes that have not been filled yet
-                    List<int>? missingGrades = Categories[idx].GetUnenteredIdxes();
-
                     //runs until all letters are obtained
                     while (lettersObtained != LetterGrades.Letters.Count())
                     {
@@ -224,7 +263,7 @@ namespace GradeCalculatorLibrary
                             if (IsNewLetterAvailable(grade, lettersObtained, idx))
                             {
                                 //generate an updated category score report
-                                categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx]);
+                                categoryScoreReports[idx] = new CategoryScoreReport(Categories[idx], missingGrades);
 
                                 int amtToAdd = 0;
 

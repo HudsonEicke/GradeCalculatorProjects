@@ -1,7 +1,6 @@
 ﻿//maybe add something to show that a score was calculated
 
 using GradeCalculatorLibrary;
-using System;
 
 namespace GradeCalculatorTerminal
 {
@@ -675,7 +674,13 @@ namespace GradeCalculatorTerminal
                 {
                     for (int j = 0; j < scoreReport.CategoryScoreReports[i].Grades.Length; j++)
                     {
-                        Console.Write($"{scoreReport.CategoryScoreReports[i].CategoryName} {j + 1}: {double.Round(scoreReport.CategoryScoreReports[i].Grades[j], 2, MidpointRounding.AwayFromZero)} | ");
+                        if (!scoreReport.CategoryScoreReports[i].HasDrops)
+                            Console.Write($"{scoreReport.CategoryScoreReports[i].CategoryName} {j + 1}: {double.Round(scoreReport.CategoryScoreReports[i].Grades[j], 2, MidpointRounding.AwayFromZero)} | ");
+                        else if (scoreReport.CategoryScoreReports[i].DropIdxes.Contains(j))
+                            Console.Write($"{scoreReport.CategoryScoreReports[i].CategoryName} {j + 1}: !{double.Round(scoreReport.CategoryScoreReports[i].Grades[j], 2, MidpointRounding.AwayFromZero)}! | ");
+                        else
+                            Console.Write($"{scoreReport.CategoryScoreReports[i].CategoryName} {j + 1}: {double.Round(scoreReport.CategoryScoreReports[i].Grades[j], 2, MidpointRounding.AwayFromZero)} | ");
+
                     }
                 }
 

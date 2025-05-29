@@ -16,15 +16,17 @@ namespace GradeCalculatorLibrary
         public CategoryScoreReport(string categoryName, double[] grades, bool hasDrops, List<int> dropIdxes)
         {
             if(hasDrops)
-                Setup(categoryName, grades, hasDrops, dropIdxes);
+                Setup(categoryName, grades, hasDrops, dropIdxes, new List<int>());
             else
                 Setup(categoryName, grades);
         }
 
-        public CategoryScoreReport(Category category)
+        public CategoryScoreReport(Category category, List<int> unenteredIdxs)
         {
             if (!category.HasDrops)
                 Setup(category.Name, category.Grades);
+            else
+                Setup(category.Name, category.Grades, category.HasDrops, category.GetDropIndexes(), unenteredIdxs);
         }
 
         private void Setup(string categoryName, double[] ? grades)
@@ -43,8 +45,24 @@ namespace GradeCalculatorLibrary
             HasDrops = false;
         }
 
-        private void Setup(string categoryName, double[] grades, bool hasDrops, List<int> dropIdxes)
+        private void Setup(string categoryName, double[] grades, bool hasDrops, List<int> dropIdxes, List<int> unenteredIdxs)
         {
+
+            if (grades == null)
+                return;
+
+            CategoryName = categoryName;
+            Grades = new double[grades.Length];
+            DropIdxes = dropIdxes;
+            HasDrops = true;
+
+            for (int i = 0; i < Grades.Length; i++)
+            {
+                if (dropIdxes.Contains(i) && unenteredIdxs.Contains(i))
+                    Grades[i] = 0;
+                else
+                    Grades[i] = grades[i];
+            }
 
         }
     }
