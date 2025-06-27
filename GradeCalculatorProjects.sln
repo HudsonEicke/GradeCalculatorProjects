@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradeCalculatorTester", "Gr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradeCalculatorTerminal", "GradeCalculatorTerminal\GradeCalculatorTerminal.csproj", "{DDD3D7FF-EF60-42E3-9727-5BBC34EA18E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradeCalculatorApp", "GradeCalculatorApp\GradeCalculatorApp.csproj", "{E993C285-4475-47B8-8238-681025D560A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DDD3D7FF-EF60-42E3-9727-5BBC34EA18E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDD3D7FF-EF60-42E3-9727-5BBC34EA18E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDD3D7FF-EF60-42E3-9727-5BBC34EA18E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E993C285-4475-47B8-8238-681025D560A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E993C285-4475-47B8-8238-681025D560A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E993C285-4475-47B8-8238-681025D560A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E993C285-4475-47B8-8238-681025D560A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
