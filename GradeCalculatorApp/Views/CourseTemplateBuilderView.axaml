@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="using:GradeCalculatorApp.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="vm:CourseTemplateBuilderViewModel"
+             x:Class="GradeCalculatorApp.Views.CourseTemplateBuilderView">
+
+	<Design.DataContext>
+		<vm:CourseTemplateBuilderViewModel/>
+	</Design.DataContext>
+	
+	<Grid RowDefinitions="Auto, Auto, *, Auto" ColumnDefinitions="*">
+		
+		<!-- Course name -->
+		<TextBox Text="{Binding CourseName}"  Watermark="Course Name" Grid.Row="0"/>
+		
+		<!-- Add letter grades here-->
+		
+		<!-- Categories -->
+		<ScrollViewer Grid.Row="2">
+			<ItemsControl ItemsSource="{Binding Categories}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="vm:CategoryTemplateViewModel">
+						<Border Background="Gray" Margin="10">
+							<Grid RowDefinitions="Auto, *">
+							
+								<!-- Category name -->
+								<TextBox Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" Width="200" HorizontalAlignment="Left" Foreground="Black" Background="LightGray" Watermark="Category Name" FontWeight="Medium"/>
+
+								<Button Grid.Row="0" HorizontalAlignment="Right" Content="TEST" Margin="0, 10, 10, 0" Background="DarkGray"/>
+
+								<WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+								
+									<!-- Category weight -->
+									<StackPanel Margin="20">
+										<TextBlock Text="Weight"  HorizontalAlignment="Center" FontWeight="Medium"/>
+										<TextBox Text="{Binding Weight}"  HorizontalAlignment="Center"/>
+									</StackPanel>
+
+									<!-- Assignment count -->
+									<StackPanel Margin="20">
+										<TextBlock Text="Assignment Count"  HorizontalAlignment="Center" FontWeight="Medium"/>
+										<TextBox Text="{Binding AssignmentCount}"  HorizontalAlignment="Center"/>
+									</StackPanel>
+
+									<!-- Has drops -->
+									<StackPanel Margin="20">
+										<TextBlock Text="Drops" HorizontalAlignment="Center" FontWeight="Medium"/>
+										<CheckBox IsChecked="{Binding HasDrops}" HorizontalAlignment="Center"/>
+									</StackPanel>
+								
+									<!-- Drop count -->
+									<StackPanel Margin="20">
+										<TextBlock Text="Drop Count"  HorizontalAlignment="Center" FontWeight="Medium"/>
+										<TextBox Text="{Binding DropCount}"  HorizontalAlignment="Center"/>
+									</StackPanel>
+
+									<!-- Difficulty -->
+									<StackPanel Margin="20">
+										<TextBlock Text="Difficulty"  HorizontalAlignment="Center" FontWeight="Medium"/>
+										<TextBox Text="{Binding Difficulty}"  HorizontalAlignment="Center"/>
+									</StackPanel>
+
+								</WrapPanel>
+							
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+		
+	</Grid>
+</UserControl>
