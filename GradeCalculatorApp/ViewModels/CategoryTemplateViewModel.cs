@@ -10,18 +10,24 @@ namespace GradeCalculatorApp.ViewModels
         private string? _name;
 
         [ObservableProperty]
-        private string? _weight;
+        private double? _weight;
 
         [ObservableProperty]
-        private string? _assignmentCount;
+        private int? _assignmentCount;
 
         [ObservableProperty]
         private bool _hasDrops;
 
         [ObservableProperty]
-        private string? _dropCount;
+        private int? _dropCount;
 
         [ObservableProperty]
-        private string? _difficulty;
+        private int? _difficulty;
+
+        partial void OnHasDropsChanged(bool oldValue, bool newValue)
+        {
+            if (!newValue)
+                DropCount = null;
+        }
     }
 }

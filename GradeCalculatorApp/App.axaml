@@ -11,5 +11,17 @@
   
     <Application.Styles>
         <FluentTheme />
+
+		<!--Style for the template category text box-->
+		<Style Selector="TextBox.h1">
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+		</Style>
+
+		<!--Style for the template category text block-->
+		<Style Selector="TextBlock.h1">
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="FontWeight" Value="Medium"/>
+		</Style>
+		
     </Application.Styles>
 </Application>

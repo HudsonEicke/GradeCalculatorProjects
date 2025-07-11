@@ -11,6 +11,7 @@ namespace GradeCalculatorApp.ViewModels
         private string? _courseName;
 
         //add letter grade stuff later
+        public ObservableCollection<LetterGradeViewModel> LetterGrades { get; } = new ObservableCollection<LetterGradeViewModel>();
 
         public ObservableCollection<CategoryTemplateViewModel> Categories { get; } = new ObservableCollection<CategoryTemplateViewModel>();
 
@@ -24,6 +25,13 @@ namespace GradeCalculatorApp.ViewModels
             Categories[1].Name = "Test 2";
             Categories[2].Name = "Test 3";
             Categories[3].Name = "Test 4";
+
+
+            LetterGrades.Add(new LetterGradeViewModel());
+            LetterGrades.Add(new LetterGradeViewModel());
+            LetterGrades.Add(new LetterGradeViewModel());
+            LetterGrades.Add(new LetterGradeViewModel());
+            LetterGrades.Add(new LetterGradeViewModel());
         }
 
     }
