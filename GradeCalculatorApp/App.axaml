@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="GradeCalculatorApp.App"
              xmlns:local="using:GradeCalculatorApp"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
@@ -10,18 +10,24 @@
     </Application.DataTemplates>
   
     <Application.Styles>
-        <FluentTheme />
+        <FluentTheme/>
 
 		<!--Style for the template category text box-->
 		<Style Selector="TextBox.h1">
 			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="FontWeight" Value="Bold"/>
 		</Style>
 
 		<!--Style for the template category text block-->
 		<Style Selector="TextBlock.h1">
 			<Setter Property="HorizontalAlignment" Value="Center"/>
 			<Setter Property="FontWeight" Value="Medium"/>
+			<Setter Property="Foreground" Value="White"/>
 		</Style>
-		
+
+		<Style Selector="TextBox:invalid">
+			<Setter Property="BorderBrush" Value="Red"/>
+			<Setter Property="BorderThickness" Value="2"/>
+		</Style>
     </Application.Styles>
 </Application>

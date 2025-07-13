@@ -12,7 +12,7 @@
 	
 	<Border Background="DimGray">
     	<TabControl>
-	    	<TabItem Header="Course Template Builder">
+	    	<TabItem Header="Course Template Builder" Foreground="White">
 		    	<views:CourseTemplateBuilderView DataContext="{Binding CourseTemplateBuilderViewModel}" />
 		    </TabItem>
 	    </TabControl>

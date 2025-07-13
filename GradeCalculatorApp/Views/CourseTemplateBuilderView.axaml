@@ -11,18 +11,20 @@
 		<vm:CourseTemplateBuilderViewModel/>
 	</Design.DataContext>
 	
-	<Grid RowDefinitions="Auto, Auto, *, Auto" ColumnDefinitions="*">
+	<Grid RowDefinitions="Auto, Auto, *, Auto" ColumnDefinitions="*" x:Name="Root">
 		
 		<!-- Course name -->
-		<TextBox Text="{Binding CourseName}"  Watermark="Course Name" Grid.Row="0"/>
+		<TextBox Text="{Binding CourseName, Mode=TwoWay}"  Watermark="Course Name" Grid.Row="0"/>
 		
-		<!-- Add letter grades here-->
+		<!-- Letter Grades-->
 		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
 			<StackPanel Orientation="Horizontal">
+				
 				<StackPanel>
-					<TextBlock Text="Letter" Margin="12.5"/>
-					<TextBlock Text="Grade" Margin="12.5"/>
+					<TextBlock Classes ="h1" Text="Letter" Margin="12.5"/>
+					<TextBlock Classes ="h1" Text="Grade" Margin="12.5"/>
 				</StackPanel>
+				
 				<ItemsControl ItemsSource="{Binding LetterGrades}">
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
@@ -42,8 +44,8 @@
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
 
-				<Button Content="+" Margin="5" Width="35" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Medium" Foreground="LightGreen" FontSize="20"/>
-				<Button Content="-" Margin="5" Width="35" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Medium" Foreground="Red" FontSize="20"/>
+				<Button Command="{Binding AddLetterGradeCommand}" Content="+" Margin="5" Width="35" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Medium" Foreground="LightGreen" FontSize="20"/>
+				<Button Command="{Binding RemoveLetterGradeCommand}" Content="-" Margin="5" Width="35" Height="35" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Medium" Foreground="Red" FontSize="20"/>
 				
 			</StackPanel>
 		</ScrollViewer>
@@ -60,7 +62,7 @@
 									<!-- Category name -->
 									<TextBox Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" Width="200" HorizontalAlignment="Left" Foreground="Black" Background="LightGray" Watermark="Category Name" FontWeight="Medium"/>
 	
-									<Button Grid.Row="0" HorizontalAlignment="Right" Content="-" Margin="0, 10, 10, 0" Background="DarkGray" Foreground="Red"/>
+									<Button Command="{Binding #Root.((vm:CourseTemplateBuilderViewModel)DataContext).RemoveCategoryCommand}" CommandParameter="{Binding .}" Grid.Row="0" HorizontalAlignment="Right" Content="-" Margin="0, 10, 10, 0" Background="DarkGray" Foreground="Red"/>
 
 									<WrapPanel Grid.Row="1" HorizontalAlignment="Center">
 									
@@ -101,9 +103,15 @@
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
-				<Button HorizontalAlignment="Stretch" Margin="10" Content="+ Add Category" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Medium" Foreground="LightGreen"/>
+				
+				<Button Command="{Binding AddCategoryCommand}" HorizontalAlignment="Stretch" Margin="10" Content="+ Add Category" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Medium" Foreground="LightGreen"/>
 			</StackPanel>
 		</ScrollViewer>
+
+		<WrapPanel Grid.Row="3" HorizontalAlignment="Right">
+			<Button Command="{Binding ClearCommand}" Content="Clear" Margin="5" Background="DarkGray" Foreground="Red" FontWeight="Medium"/>
+			<Button Command="{Binding CreateTemplateCommand}" Content="Save Template" IsEnabled="{Binding !HasErrors}" Margin="5" Background="DarkGray" Foreground="LightGreen" FontWeight="Medium"/>
+		</WrapPanel>
 		
 	</Grid>
 </UserControl>
