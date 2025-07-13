@@ -8,7 +8,7 @@
         x:Class="GradeCalculatorApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="GradeCalculatorApp">
+        Title="Grade Calculator">
 	
 	<Border Background="DimGray">
     	<TabControl>
