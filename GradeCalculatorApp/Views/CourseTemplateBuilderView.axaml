@@ -14,7 +14,7 @@
 	<Grid RowDefinitions="Auto, Auto, *, Auto" ColumnDefinitions="*" x:Name="Root">
 		
 		<!-- Course name -->
-		<TextBox Text="{Binding CourseName, Mode=TwoWay}"  Watermark="Course Name" Grid.Row="0"/>
+		<TextBox Text="{Binding CourseName, Mode=TwoWay}"  Watermark="Course Name" Grid.Row="0" FontWeight="Medium"/>
 		
 		<!-- Letter Grades-->
 		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
