@@ -14,6 +14,7 @@ namespace GradeCalculatorApp.ViewModels
     public partial class CategoryViewModel : ViewModelBase
     {
         private Category _category;
+
         public ObservableCollection<AssignmentViewModel> Assignments { get; } = new ObservableCollection<AssignmentViewModel>();
 
         [ObservableProperty]
