@@ -16,7 +16,7 @@ namespace GradeCalculatorApp.ViewModels
         [CustomValidation(typeof(CourseTemplateBuilderViewModel), nameof(ValidateCourseName))]
         private string? _courseName;
 
-        public ObservableCollection<LetterGradeViewModel> LetterGrades { get; } = new ObservableCollection<LetterGradeViewModel>();
+        public ObservableCollection<LetterGradeTemplateViewModel> LetterGrades { get; } = new ObservableCollection<LetterGradeTemplateViewModel>();
 
         public ObservableCollection<CategoryTemplateViewModel> Categories { get; } = new ObservableCollection<CategoryTemplateViewModel>();
 
@@ -68,7 +68,7 @@ namespace GradeCalculatorApp.ViewModels
         [RelayCommand]
         private void AddLetterGrade()
         {
-            LetterGradeViewModel letter = new LetterGradeViewModel();
+            LetterGradeTemplateViewModel letter = new LetterGradeTemplateViewModel();
 
             //subscribes to the letter grades event so the letter grade can notify the course if a change has been made
             letter.SaveTemplateButtonChange += SaveTemplateButtonChange;
@@ -101,7 +101,7 @@ namespace GradeCalculatorApp.ViewModels
             CourseName = null;
 
             //usubscribes from all of the event since they are no longer needed
-            foreach (LetterGradeViewModel letter in LetterGrades)
+            foreach (LetterGradeTemplateViewModel letter in LetterGrades)
             {
                 letter.SaveTemplateButtonChange -= SaveTemplateButtonChange;
             }
@@ -172,7 +172,7 @@ namespace GradeCalculatorApp.ViewModels
                 return false;
 
             //validates all of the letter grades
-            foreach(LetterGradeViewModel letterGrade in LetterGrades)
+            foreach(LetterGradeTemplateViewModel letterGrade in LetterGrades)
             {
                 if(!letterGrade.IsValidLetterGrade())
                     return false;

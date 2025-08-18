@@ -7,14 +7,14 @@ using System.Xml.Linq;
 
 namespace GradeCalculatorApp.ViewModels
 {
-    public partial class LetterGradeViewModel : ObservableValidator
+    public partial class LetterGradeTemplateViewModel : ObservableValidator
     {
         [ObservableProperty]
-        [CustomValidation(typeof(LetterGradeViewModel), nameof(ValidateLetter))]
+        [CustomValidation(typeof(LetterGradeTemplateViewModel), nameof(ValidateLetter))]
         private string? _letter;
 
         [ObservableProperty]
-        [CustomValidation(typeof(LetterGradeViewModel), nameof(ValidateGrade))]
+        [CustomValidation(typeof(LetterGradeTemplateViewModel), nameof(ValidateGrade))]
         private double? _grade;
 
         public event EventHandler? SaveTemplateButtonChange;
