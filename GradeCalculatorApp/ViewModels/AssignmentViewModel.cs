@@ -10,6 +10,8 @@ namespace GradeCalculatorApp.ViewModels
 {
     public partial class AssignmentViewModel : ObservableValidator
     {
+        private string _assignmentName;
+
         [ObservableProperty]
         private int _assignmentNum;
 
@@ -17,12 +19,14 @@ namespace GradeCalculatorApp.ViewModels
         [CustomValidation(typeof(AssignmentViewModel), nameof(ValidateStringGrade))]
         private string? _stringGrade;
 
+        public string DisplayName => $"{_assignmentName} {_assignmentNum + 1}";
         public double? Grade { get; private set; }
 
         public event EventHandler<int>? GradeChanged;
 
-        public AssignmentViewModel(int assignmentNum)
+        public AssignmentViewModel(string assignmentName, int assignmentNum)
         {
+            _assignmentName = assignmentName;
             _assignmentNum = assignmentNum;
         }
 

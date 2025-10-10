@@ -28,13 +28,16 @@ namespace GradeCalculatorApp.ViewModels
         //used for displaying assignments with nums next to them ex: hw1 hw2 hw3 ...
         public string AssignmentName {  get => _category.Name; }
 
+        [ObservableProperty]
+        public string _displayGrade;
+
         public CategoryViewModel(Category category)
         {
             _category = category;
 
             for (int i = 0; i < category.AssignmentCount; i++)
             {
-                Assignments.Add(new AssignmentViewModel(i));
+                Assignments.Add(new AssignmentViewModel(AssignmentName, i));
                 Assignments[i].GradeChanged += AssignmentGradeChange;
             }
 
@@ -55,6 +58,8 @@ namespace GradeCalculatorApp.ViewModels
             }
 
             Name = nameBuilder.ToString();
+
+            _displayGrade = $"0/{MaxWeight.ToString("0.##")}";
         }
 
         private void AssignmentGradeChange(object? sender, int assignmentNum)
@@ -69,6 +74,8 @@ namespace GradeCalculatorApp.ViewModels
             }
 
             Grade = _category.ObtainedScore;
+
+            DisplayGrade = $"{Grade.ToString("0.##")}/{MaxWeight.ToString("0.##")}";
         }
     }
 }

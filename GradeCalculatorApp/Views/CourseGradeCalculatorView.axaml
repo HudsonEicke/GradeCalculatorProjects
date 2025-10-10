@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="using:GradeCalculatorApp.ViewModels"
+			 xmlns:views ="using:GradeCalculatorApp.Views"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="vm:CourseGradeCalculatorViewModel"
+             x:Class="GradeCalculatorApp.Views.CourseGradeCalculatorView">
+	<Design.DataContext>
+		<vm:CourseGradeCalculatorViewModel/>
+	</Design.DataContext>
+
+	<Grid RowDefinitions="Auto, Auto, *, Auto">
+		<TextBlock Classes="h1" Text="{Binding CourseName}" Grid.Row="0" Margin="12.5" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18"/>
+		
+		<TextBlock Classes="h1" Text="{Binding TrueGrade, StringFormat='Current true grade: {0:F2}%'}" Grid.Row="1" Margin="12.5" VerticalAlignment="Center" HorizontalAlignment="Left" IsVisible="{Binding ValidCourseLoaded}"/>
+
+		<TabControl IsVisible="{Binding ValidCourseLoaded}" Grid.Row="2" ItemsSource="{Binding Tabs}">
+			<TabControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel/>
+				</ItemsPanelTemplate>
+			</TabControl.ItemsPanel>
+
+			<TabControl.ItemTemplate>
+				<DataTemplate x:DataType="vm:TabViewModelBase">
+					<TextBlock Text="{Binding TabHeader}" Foreground="White" FontWeight="Medium"/>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+
+			<TabControl.ContentTemplate>
+				<DataTemplate>
+					<ContentControl Content="{Binding}">
+						<ContentControl.DataTemplates>
+							<DataTemplate DataType="vm:CourseGradeCalculatorInputViewModel">
+								<views:CourseGradeCalculatorInputView />
+							</DataTemplate>
+							<DataTemplate DataType="vm:LetterGradeResultViewModel">
+								<views:LetterGradeResultView />
+							</DataTemplate>
+						</ContentControl.DataTemplates>
+					</ContentControl>
+				</DataTemplate>
+			</TabControl.ContentTemplate>
+		</TabControl>
+		
+		<TextBlock Text="{Binding ErrorMessage}" FontSize="24" Foreground="Red" IsVisible="{Binding !ValidCourseLoaded}" Grid.Row="2" HorizontalAlignment="Center"/>
+		
+		<Button Command="{Binding OpenCourseCommand}" Grid.Row="3" Content="Load Course" Margin="5" Background="DarkGray" FontWeight="Medium" HorizontalAlignment="Left"/>
+		<Button Command="{Binding CalculateGradeCommand}" Grid.Row="3" Content="Calculate" Margin="5" Background="DarkGray" Foreground="LightGreen" FontWeight="Medium" HorizontalAlignment="Right" IsEnabled="{Binding ValidCourseLoaded}"/>
+		
+		
+	</Grid>
+</UserControl>

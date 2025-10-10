@@ -15,6 +15,10 @@
 	    	<TabItem Header="Course Template Builder" Foreground="White">
 		    	<views:CourseTemplateBuilderView DataContext="{Binding CourseTemplateBuilderViewModel}" />
 		    </TabItem>
+
+			<TabItem Header="Course Grade Calculator" Foreground="White">
+				<views:CourseGradeCalculatorView DataContext="{Binding CourseGradeCalculatorViewModel}"/>
+			</TabItem>
 	    </TabControl>
 	</Border>
 
