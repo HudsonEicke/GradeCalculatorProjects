@@ -10,41 +10,40 @@
 		<vm:LetterGradeResultViewModel/>
 	</Design.DataContext>
 
-	<StackPanel>
-		<ScrollViewer>
-			<StackPanel>
-				<TextBlock Text="No grades calculated yet" HorizontalAlignment="Center" Foreground="Red" FontSize="24" IsVisible="{Binding !Calculated}"/>
-				<ItemsControl ItemsSource="{Binding Categories}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate DataType="vm:CategoryResultViewModel">
-							<Border Background="Gray" Margin="10">
-								<Grid RowDefinitions="Auto, *">
+	
+	<ScrollViewer>
+		<StackPanel>
+			<TextBlock Text="No grades calculated yet" HorizontalAlignment="Center" Foreground="Red" FontSize="24" IsVisible="{Binding !Calculated}"/>
+			<ItemsControl ItemsSource="{Binding Categories}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="vm:CategoryResultViewModel">
+						<Border Background="Gray" Margin="10">
+							<Grid RowDefinitions="Auto, *">
 
-									<!-- Category name -->
-									<TextBlock Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left" Foreground="Black" FontWeight="Medium"/>
+								<!-- Category name -->
+								<TextBlock Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left" Foreground="Black" FontWeight="Medium"/>
 
-									<ItemsControl ItemsSource="{Binding Assignments}" Grid.Row="1">
-										<ItemsControl.ItemsPanel>
-											<ItemsPanelTemplate>
-												<WrapPanel Orientation="Horizontal" />
-											</ItemsPanelTemplate>
-										</ItemsControl.ItemsPanel>
-										<ItemsControl.ItemTemplate>
-											<DataTemplate DataType="vm:AssignmentResultViewModel">
-												<StackPanel Margin="10">
-													<TextBlock Classes ="h1" Text="{Binding DisplayName}"/>
-													<TextBox Classes="h1" Text="{Binding Grade}" IsEnabled="False" Foreground="{Binding ForegroundColor}"/>
-												</StackPanel>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
-
-								</Grid>
-							</Border>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</StackPanel>
-		</ScrollViewer>
-	</StackPanel>
+								<ItemsControl ItemsSource="{Binding Assignments}" Grid.Row="1">
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel Orientation="Horizontal" />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate DataType="vm:AssignmentResultViewModel">
+											<StackPanel Margin="10">
+												<TextBlock Classes ="h1" Text="{Binding DisplayName}"/>
+												<TextBox Classes="h1" Text="{Binding Grade}" IsEnabled="False" Foreground="{Binding ForegroundColor}"/>
+											</StackPanel>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
+	</ScrollViewer>
 </UserControl>

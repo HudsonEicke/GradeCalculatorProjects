@@ -11,6 +11,7 @@ namespace GradeCalculatorLibrary
         public string ? CategoryName { get; private set; }
         public double[] ? Grades { get; private set; }
         public bool HasDrops { get; private set; }
+        public List<int> CalculatedIdxs { get; private set; }
         public List<int> ? DropIdxes { get; private set; }
 
         public CategoryScoreReport(string categoryName, double[] grades, bool hasDrops, List<int> dropIdxes)
@@ -23,6 +24,8 @@ namespace GradeCalculatorLibrary
 
         public CategoryScoreReport(Category category, List<int> unenteredIdxs)
         {
+            CalculatedIdxs = unenteredIdxs;
+
             if (!category.HasDrops)
                 Setup(category.Name, category.Grades);
             else

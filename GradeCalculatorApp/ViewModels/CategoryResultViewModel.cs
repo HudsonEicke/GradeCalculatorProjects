@@ -47,14 +47,14 @@ namespace GradeCalculatorApp.ViewModels
             {
                 for (int i = 0; i < _scoreReport.Grades.Count(); i++)
                 {
-                    Assignments.Add(new AssignmentResultViewModel(_scoreReport.CategoryName, i, _scoreReport.Grades[i], _scoreReport.DropIdxes.Contains(i)));
+                    Assignments.Add(new AssignmentResultViewModel(_scoreReport.CategoryName, i, _scoreReport.Grades[i], _scoreReport.DropIdxes.Contains(i), _scoreReport.CalculatedIdxs.Contains(i)));
                 }
             }
             else
             {
                 for (int i = 0; i < _scoreReport.Grades.Count(); i++)
                 {
-                    Assignments.Add(new AssignmentResultViewModel(_scoreReport.CategoryName, i, _scoreReport.Grades[i], false));
+                    Assignments.Add(new AssignmentResultViewModel(_scoreReport.CategoryName, i, _scoreReport.Grades[i], false, _scoreReport.CalculatedIdxs.Contains(i)));
                 }
             }
         }

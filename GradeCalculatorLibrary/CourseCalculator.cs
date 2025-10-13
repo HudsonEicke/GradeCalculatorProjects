@@ -101,12 +101,15 @@ namespace GradeCalculatorLibrary
             double grade = 0;
             int lettersObtained = 0;
 
+            //used for reseting scores back to original values
+            List<List<int>> missingScores = new List<List<int>>();
 
             for (int i = 0; i < Categories.Count; i++)
             {
                 //recalculates to get the most accurate grade
                 Categories[i].RecalculateScore();
-                categoryScoreReports[i] = new CategoryScoreReport(Categories[i], new List<int>());
+                missingScores.Add(Categories[i].GetUnenteredIdxes());
+                categoryScoreReports[i] = new CategoryScoreReport(Categories[i], missingScores[i]);
 
                 //check if any grades can be changed in the category
                 if (Categories[i].AllEntered())
@@ -292,6 +295,16 @@ namespace GradeCalculatorLibrary
                 //increase the current grade properly
                 grade += Categories[idx].ObtainedScore;
             }
+
+            //reverts all of the scores back to default
+            for (int i = 0; i < missingScores.Count(); i++)
+            {
+                foreach(int assignmentNum in missingScores[i])
+                {
+                    Categories[i].ResetScore(assignmentNum);
+                }
+            }
+
 
             return scoreReports;
         }
