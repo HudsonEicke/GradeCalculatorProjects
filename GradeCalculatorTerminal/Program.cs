@@ -1,6 +1,4 @@
-﻿//maybe add something to show that a score was calculated
-
-using GradeCalculatorLibrary;
+﻿using GradeCalculatorLibrary;
 
 namespace GradeCalculatorTerminal
 {
