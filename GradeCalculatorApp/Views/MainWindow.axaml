@@ -10,7 +10,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="Grade Calculator">
 	
-	<Border Background="DimGray">
+	<Border Background="#26203d">
     	<TabControl>
 	    	<TabItem Header="Course Template Builder" Foreground="White">
 		    	<views:CourseTemplateBuilderView DataContext="{Binding CourseTemplateBuilderViewModel}" />
