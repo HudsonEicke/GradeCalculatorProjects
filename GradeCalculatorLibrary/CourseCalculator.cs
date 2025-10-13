@@ -185,7 +185,17 @@
 
                             //if all obtained
                             if (lettersObtained == LetterGrades.Letters.Count())
+                            {
+                                //reverts all of the scores back to default
+                                for (int k = 0; k < missingScores.Count(); k++)
+                                {
+                                    foreach (int assignmentNum in missingScores[k])
+                                    {
+                                        Categories[k].ResetScore(assignmentNum);
+                                    }
+                                }
                                 return scoreReports;
+                            }
                         }
                     }
 
@@ -228,7 +238,17 @@
                                 
                                 //if all obtained
                                 if (lettersObtained == LetterGrades.Letters.Count())
+                                {
+                                    //reverts all of the scores back to default
+                                    for (int k = 0; k < missingScores.Count(); k++)
+                                    {
+                                        foreach (int assignmentNum in missingScores[k])
+                                        {
+                                            Categories[k].ResetScore(assignmentNum);
+                                        }
+                                    }
                                     return scoreReports;
+                                }
                             }
                         }
 
@@ -280,7 +300,17 @@
 
                                 //if all obtained
                                 if (lettersObtained == LetterGrades.Letters.Count())
+                                {
+                                    //reverts all of the scores back to default
+                                    for (int k = 0; k < missingScores.Count(); k++)
+                                    {
+                                        foreach (int assignmentNum in missingScores[k])
+                                        {
+                                            Categories[k].ResetScore(assignmentNum);
+                                        }
+                                    }
                                     return scoreReports;
+                                }
                             }
                         }
                     }
@@ -293,12 +323,11 @@
             //reverts all of the scores back to default
             for (int i = 0; i < missingScores.Count(); i++)
             {
-                foreach(int assignmentNum in missingScores[i])
+                foreach (int assignmentNum in missingScores[i])
                 {
                     Categories[i].ResetScore(assignmentNum);
                 }
             }
-
 
             return scoreReports;
         }
