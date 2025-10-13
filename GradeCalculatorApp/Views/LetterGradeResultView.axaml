@@ -10,18 +10,24 @@
 		<vm:LetterGradeResultViewModel/>
 	</Design.DataContext>
 
+	<UserControl.Styles>
+		<Style Selector="TextBox:disabled /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#4d6da6"/>
+		</Style>
+	</UserControl.Styles>
+
 	
 	<ScrollViewer>
 		<StackPanel>
-			<TextBlock Text="No grades calculated yet" HorizontalAlignment="Center" Foreground="Red" FontSize="24" IsVisible="{Binding !Calculated}"/>
+			<TextBlock Text="No grades calculated yet" HorizontalAlignment="Center" Foreground="Red" FontSize="24" IsVisible="{Binding !Calculated}" FontWeight="Bold"/>
 			<ItemsControl ItemsSource="{Binding Categories}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate DataType="vm:CategoryResultViewModel">
-						<Border Background="Gray" Margin="10">
+						<Border Background="#8859b6" Margin="10">
 							<Grid RowDefinitions="Auto, *">
 
 								<!-- Category name -->
-								<TextBlock Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left" Foreground="Black" FontWeight="Medium"/>
+								<TextBlock Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left" Foreground="White" FontWeight="Medium"/>
 
 								<ItemsControl ItemsSource="{Binding Assignments}" Grid.Row="1">
 									<ItemsControl.ItemsPanel>
@@ -33,12 +39,11 @@
 										<DataTemplate DataType="vm:AssignmentResultViewModel">
 											<StackPanel Margin="10">
 												<TextBlock Classes ="h1" Text="{Binding DisplayName}"/>
-												<TextBox Classes="h1" Text="{Binding Grade}" IsEnabled="False" Foreground="{Binding ForegroundColor}"/>
+												<TextBox Classes="h1" Text="{Binding Grade}" IsEnabled="False" Foreground="{Binding ForegroundColor}" Background="#6495ed"/>
 											</StackPanel>
 										</DataTemplate>
 									</ItemsControl.ItemTemplate>
 								</ItemsControl>
-								
 							</Grid>
 						</Border>
 					</DataTemplate>

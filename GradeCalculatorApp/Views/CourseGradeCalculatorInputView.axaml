@@ -13,14 +13,14 @@
 		<ItemsControl ItemsSource="{Binding Categories}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate DataType="vm:CategoryViewModel">
-					<Border Background="Gray" Margin="10">
+					<Border Background="#8859b6" Margin="10">
 						<Grid RowDefinitions="Auto, *">
 
 							<!-- Category name -->
-							<TextBlock Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left" Foreground="Black" FontWeight="Medium"/>
+							<TextBlock Classes="h1" Text="{Binding Name}" Grid.Row="0" Margin="10, 10, 0, 0" HorizontalAlignment="Left" Foreground="White" FontWeight="Bold"/>
 									
 							<!-- Category Grade -->
-							<TextBlock Text="{Binding DisplayGrade}" Grid.Row="0" HorizontalAlignment="Right" Margin="0, 10, 10, 0" Foreground="Black" FontWeight="Medium"/>
+							<TextBlock Classes="h1" Text="{Binding DisplayGrade}" Grid.Row="0" HorizontalAlignment="Right" Margin="0, 10, 10, 0" Foreground="White" FontWeight="Bold"/>
 
 							<ItemsControl ItemsSource="{Binding Assignments}" Grid.Row="1">
 								<ItemsControl.ItemsPanel>
@@ -32,7 +32,7 @@
 									<DataTemplate DataType="vm:AssignmentViewModel">
 										<StackPanel Margin="10">
 											<TextBlock Classes ="h1" Text="{Binding DisplayName}"/>
-											<TextBox Classes="h1" Text="{Binding StringGrade}"/>
+											<TextBox Classes="h1" Text="{Binding StringGrade}" Background="#6495ed"/>
 										</StackPanel>
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>

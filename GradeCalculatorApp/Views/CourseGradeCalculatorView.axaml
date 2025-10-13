@@ -12,7 +12,7 @@
 	</Design.DataContext>
 
 	<Grid RowDefinitions="Auto, Auto, *, Auto">
-		<TextBlock Classes="h1" Text="{Binding CourseName}" Grid.Row="0" Margin="12.5" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18"/>
+		<TextBlock Classes="h1" Text="{Binding CourseName}" Grid.Row="0" Margin="12.5" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" FontWeight="Bold"/>
 		
 		<TextBlock Classes="h1" Text="{Binding TrueGrade, StringFormat='Current true grade: {0:F2}%'}" Grid.Row="1" Margin="12.5" VerticalAlignment="Center" HorizontalAlignment="Left" IsVisible="{Binding ValidCourseLoaded}"/>
 
@@ -45,10 +45,10 @@
 			</TabControl.ContentTemplate>
 		</TabControl>
 		
-		<TextBlock Text="{Binding ErrorMessage}" FontSize="24" Foreground="Red" IsVisible="{Binding !ValidCourseLoaded}" Grid.Row="2" HorizontalAlignment="Center"/>
+		<TextBlock Text="{Binding ErrorMessage}" FontSize="24" Foreground="Red" IsVisible="{Binding !ValidCourseLoaded}" Grid.Row="2" HorizontalAlignment="Center" FontWeight="Bold"/>
 		
-		<Button Command="{Binding OpenCourseCommand}" Grid.Row="3" Content="Load Course" Margin="5" Background="DarkGray" FontWeight="Medium" HorizontalAlignment="Left"/>
-		<Button Command="{Binding CalculateGradeCommand}" Grid.Row="3" Content="Calculate" Margin="5" Background="DarkGray" Foreground="LightGreen" FontWeight="Medium" HorizontalAlignment="Right" IsEnabled="{Binding ValidCourseLoaded}"/>
+		<Button Command="{Binding OpenCourseCommand}" Grid.Row="3" Content="Load Course" Margin="5" Background="#6495ed" FontWeight="Medium" HorizontalAlignment="Left" Foreground="White"/>
+		<Button Command="{Binding CalculateGradeCommand}" Grid.Row="3" Content="Calculate" Margin="5" Background="#6495ed" Foreground="LightGreen" FontWeight="Medium" HorizontalAlignment="Right" IsEnabled="{Binding ValidCourseLoaded}"/>
 		
 		
 	</Grid>
