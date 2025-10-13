@@ -83,7 +83,7 @@ namespace GradeCalculatorLibrary
             return CalculateNoDrops();
         }
 
-        private void UpdateTrueGrade()
+        public void UpdateTrueGrade()
         {
             TrueGrade = 0;
 

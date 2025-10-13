@@ -36,6 +36,11 @@ namespace GradeCalculatorApp.ViewModels
         [ObservableProperty]
         private bool _validCourseLoaded = false;
 
+        public CourseGradeCalculatorViewModel()
+        {
+            CourseGradeCalculatorInputViewModel.GradeChanged += UpdateTrueGrade;
+        }
+
         [RelayCommand]
         private async Task OpenCourse()
         {
@@ -139,6 +144,13 @@ namespace GradeCalculatorApp.ViewModels
             });
 
             return files?.Count >= 1 ? files[0] : null;
+        }
+
+
+        public void UpdateTrueGrade(object? sender, EventArgs e)
+        {
+            _course.UpdateTrueGrade();
+            TrueGrade = _course.TrueGrade;
         }
     }
 }

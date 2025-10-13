@@ -12,6 +12,8 @@ namespace GradeCalculatorApp.ViewModels
     {
         public ObservableCollection<CategoryViewModel> Categories { get; } = new ObservableCollection<CategoryViewModel>();
         public override string TabHeader => "Input";
+        public event EventHandler? GradeChanged;
+
 
         public void Clear()
         {
@@ -23,7 +25,13 @@ namespace GradeCalculatorApp.ViewModels
             foreach (Category category in course.Categories)
             {
                 Categories.Add(new CategoryViewModel(category));
+                Categories[Categories.Count() - 1].GradeChanged += UpdateTrueGrade;
             }
+        }
+
+        public void UpdateTrueGrade(object? sender, EventArgs e)
+        {
+            GradeChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

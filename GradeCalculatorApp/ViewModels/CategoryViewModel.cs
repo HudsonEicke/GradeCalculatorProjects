@@ -15,6 +15,7 @@ namespace GradeCalculatorApp.ViewModels
     {
         private Category _category;
 
+        public event EventHandler? GradeChanged;
         public ObservableCollection<AssignmentViewModel> Assignments { get; } = new ObservableCollection<AssignmentViewModel>();
 
         [ObservableProperty]
@@ -76,6 +77,8 @@ namespace GradeCalculatorApp.ViewModels
             Grade = _category.ObtainedScore;
 
             DisplayGrade = $"{Grade.ToString("0.##")}/{MaxWeight.ToString("0.##")}";
+
+            GradeChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
