@@ -72,11 +72,6 @@
             return Categories[categoryNum].ResetScore(assignmentNum);
         }
 
-        public ScoreReport[] Calculate()
-        {
-            return CalculateNoDrops();
-        }
-
         public void UpdateTrueGrade()
         {
             TrueGrade = 0;
@@ -87,7 +82,7 @@
             }
         }
 
-        private ScoreReport[] CalculateNoDrops()
+        public ScoreReport[] Calculate()
         {
             List<(int categoryNum, int difficulty)> unEnteredCategories = new List<(int categoryNum, int difficulty)>();
             ScoreReport[] scoreReports = new ScoreReport[LetterGrades.Letters.Length];
