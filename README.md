@@ -30,6 +30,7 @@ A collection of projects for grade calculation by Hudson Eicke
     - Template builder
     - Letter grade template builder for quicker template building
     - Course calculator
+    - Full error checking
 
 ## Description
 Grade Calculator Projects a collection of projects by Hudson Eicke. The projects contain a library for calculating scores required for letter grades, a terminal based application built on top of the library, and a GUI based application built in Avalonia UI using the library. The library is built to handle calculating required scores for all letter grades given any number of scores. Both the GUI and terminal based apps allow the user to build templates for classes that can be later loaded and to calculate scores on those templates.
