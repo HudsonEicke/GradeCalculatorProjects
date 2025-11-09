@@ -1,4 +1,8 @@
-﻿using GradeCalculatorLibrary;
+﻿/*
+    SHOULD NOT BE USED TO TEST ANYMORE AS THE FILE IS VERY OUTDATED
+*/
+
+using GradeCalculatorLibrary;
 
 namespace GradeCalculatorTester
 {
