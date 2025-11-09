@@ -7,6 +7,7 @@ namespace GradeCalculatorTerminal
         const string TEMPLATEFILEPATH = @"Templates";
         const string COURSETEMPLATEFILENAME = @"CourseTemplates";
         const string LETTERTEMPLATEFILENAME = @"LetterGradeTemplates";
+        private static char[] INVALIDNAMECHARS = ['\\', '/', ':', '*', '?', '\"', '<', '>', '|'];
 
         static void Main(string[] args)
         {
@@ -78,6 +79,18 @@ namespace GradeCalculatorTerminal
             Console.Write("Enter the name for the new letter grade template: ");
             input = Console.ReadLine();
 
+            while (input.IndexOfAny(INVALIDNAMECHARS) >= 0 || string.IsNullOrWhiteSpace(input))
+            {
+                if (string.IsNullOrWhiteSpace(input))
+                    Console.WriteLine("The name must contain at least 1 non white space character");
+                else
+                    Console.WriteLine("The name cannot contain: \\ / : * ? \" < > | due to how files are stored.");
+
+                Console.Write("Enter the name for the new letter grade template: ");
+                input = Console.ReadLine();
+            }
+
+
             LetterGradeSet letterGradeSet = DefaultLetterEnterMode();
 
             string letterGradeTemplateFileName = input + ".txt";
@@ -101,6 +114,18 @@ namespace GradeCalculatorTerminal
                 {
                     Console.Write("Enter the new name of the letter grade template: ");
                     input = Console.ReadLine();
+
+                    while (input.IndexOfAny(INVALIDNAMECHARS) >= 0 || string.IsNullOrWhiteSpace(input))
+                    {
+                        if (string.IsNullOrWhiteSpace(input))
+                            Console.WriteLine("The name must contain at least 1 non white space character");
+                        else
+                            Console.WriteLine("The name cannot contain: \\ / : * ? \" < > | due to how files are stored.");
+
+                        Console.Write("Enter the new name for the new letter grade template: ");
+                        input = Console.ReadLine();
+                    }
+
                     letterGradeTemplateFileName = input + ".txt";
                     newCourseLocation = Path.Combine(TEMPLATEFILEPATH, LETTERTEMPLATEFILENAME, letterGradeTemplateFileName);
                 }
@@ -124,9 +149,20 @@ namespace GradeCalculatorTerminal
             Console.Write("Enter the name of the course: ");
             input = Console.ReadLine();
 
+            while (input.IndexOfAny(INVALIDNAMECHARS) >= 0 || string.IsNullOrWhiteSpace(input))
+            {
+                if (string.IsNullOrWhiteSpace(input))
+                    Console.WriteLine("The course name must contain at least 1 non white space character");
+                else
+                    Console.WriteLine("The course name cannot contain: \\ / : * ? \" < > | due to how files are stored.");
+
+                Console.Write("Enter the name of the course: ");
+                input = Console.ReadLine();
+            }
+
             CourseTemplate course = new CourseTemplate(input);
 
-            Console.Write("Enter 1 if you want enter grades normally or 2 if you want to use a letter grade template file?: ");
+            Console.Write("Enter 1 if you want enter letter grades normally or 2 if you want to use a letter grade template file?: ");
             input = Console.ReadLine();
 
             while (!int.TryParse(input, out inputInt) || inputInt < 1 || inputInt > 2)
@@ -282,6 +318,7 @@ namespace GradeCalculatorTerminal
 
             //prepares to write the course
             string courseTemplateFileName = course.CourseName + ".txt";
+            input = course.CourseName;
 
             string newCourseLocation = Path.Combine(TEMPLATEFILEPATH, COURSETEMPLATEFILENAME, courseTemplateFileName);
 
@@ -302,6 +339,18 @@ namespace GradeCalculatorTerminal
                 {
                     Console.Write("Enter the new name of the course: ");
                     input = Console.ReadLine();
+
+                    while (input.IndexOfAny(INVALIDNAMECHARS) >= 0 || string.IsNullOrWhiteSpace(input))
+                    {
+                        if (string.IsNullOrWhiteSpace(input))
+                            Console.WriteLine("The course name must contain at least 1 non white space character");
+                        else
+                            Console.WriteLine("The course name cannot contain: \\ / : * ? \" < > | due to how files are stored.");
+
+                        Console.Write("Enter the new name of the course: ");
+                        input = Console.ReadLine();
+                    }
+
                     course.SetCourseName(input);
                     courseTemplateFileName = course.CourseName + ".txt";
                     newCourseLocation = Path.Combine(TEMPLATEFILEPATH, COURSETEMPLATEFILENAME, courseTemplateFileName);
@@ -447,14 +496,14 @@ namespace GradeCalculatorTerminal
                         Console.Write(" | ");
                 }
 
-                Console.Write("\nThe template has the above values do you want to this tempalte? (y/n): ");
+                Console.Write("\nThe template has the above values do you want to use this tempalte? (y/n): ");
                 input = Console.ReadLine();
                 input = input.ToLower();
 
                 while(input != "y" && input != "n")
                 {
                     Console.WriteLine("Invalid input please try again");
-                    Console.Write("The template has the above values do you want to this tempalte? (y/n): ");
+                    Console.Write("The template has the above values do you want to use this tempalte? (y/n): ");
                     input = Console.ReadLine();
                     input = input.ToLower();
                 }
@@ -630,7 +679,7 @@ namespace GradeCalculatorTerminal
                     Console.WriteLine($"[{i + 1}] {course.LetterGrades.Letters[i]}");
                 }
 
-                Console.Write($"Enter a number from 1 to {course.LetterGrades.Letters.Count()} or type exit to return to the main menue: ");
+                Console.Write($"Enter a number from 1 to {course.LetterGrades.Letters.Count()} or type exit to return to the main menu: ");
                 input = Console.ReadLine();
 
                 if (input.ToLower().Equals("exit"))
@@ -640,7 +689,7 @@ namespace GradeCalculatorTerminal
                 while (!int.TryParse(input, out letterIdx) || letterIdx < 1 || letterIdx > course.LetterGrades.Letters.Count())
                 {
                     Console.WriteLine("Invalid letter chosen");
-                    Console.Write($"Enter a number from 1 to {course.LetterGrades.Letters.Count()} or type exit to return to the main menue: ");
+                    Console.Write($"Enter a number from 1 to {course.LetterGrades.Letters.Count()} or type exit to return to the main menu: ");
                     input = Console.ReadLine();
 
                     if (input.ToLower().Equals("exit"))
@@ -685,7 +734,7 @@ namespace GradeCalculatorTerminal
                 Console.WriteLine();
             }
 
-            Console.WriteLine("Press enter to return to the letter selection menue");
+            Console.WriteLine("Press enter to return to the letter selection menu");
             Console.ReadLine();
         }
     }

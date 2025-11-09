@@ -202,7 +202,7 @@ namespace GradeCalculatorApp.ViewModels
 
             //prevents the user from entering characters that are invalid for file names
             if (courseName.IndexOfAny(CourseTemplateBuilderViewModel.INVALIDNAMECHARS) >= 0)
-                return new("The course name cannot contain: \\ / : * ? \" < > | do to how files are stored.");
+                return new("The course name cannot contain: \\ / : * ? \" < > | due to how files are stored.");
 
             return ValidationResult.Success;
         }
