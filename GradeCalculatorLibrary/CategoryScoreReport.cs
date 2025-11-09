@@ -8,8 +8,10 @@
         public List<int> CalculatedIdxs { get; private set; }
         public List<int> ? DropIdxes { get; private set; }
 
-        public CategoryScoreReport(string categoryName, double[] grades, bool hasDrops, List<int> dropIdxes)
+        public CategoryScoreReport(string categoryName, double[] grades, bool hasDrops, List<int> dropIdxes, List<int> unenteredIdxs)
         {
+            CalculatedIdxs = unenteredIdxs;
+
             if(hasDrops)
                 Setup(categoryName, grades, hasDrops, dropIdxes, new List<int>());
             else
