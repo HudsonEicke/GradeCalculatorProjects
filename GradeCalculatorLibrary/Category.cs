@@ -464,21 +464,6 @@ namespace GradeCalculatorLibrary
         }
     }
 
-    public class CategoryTemplateException : Exception
-    {
-        public CategoryTemplateException()
-        {
-        }
-
-        public CategoryTemplateException(string message) : base(message)
-        {
-        }
-
-        public CategoryTemplateException(string message, Exception inner) : base(message, inner)
-        {
-        }
-    }
-
     public class CategoryException : Exception
     {
         public CategoryException()
