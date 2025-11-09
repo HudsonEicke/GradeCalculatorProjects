@@ -329,7 +329,8 @@ namespace GradeCalculatorLibrary
             return (Grades[assignmentNum] / 100f) * _weightPerAssignment;
         }
 
-        public void ConvertToRealCategory()
+        //NOT USED
+        private void ConvertToRealCategory()
         {
             //is already a real category
             if (Grades != null)
