@@ -67,9 +67,12 @@
             if (categoryNum < 0 || categoryNum >= Categories.Count())
                 return false;
 
+            if(!Categories[categoryNum].ResetScore(assignmentNum))
+                return false;
+
             UpdateTrueGrade();
 
-            return Categories[categoryNum].ResetScore(assignmentNum);
+            return true;
         }
 
         public void UpdateTrueGrade()

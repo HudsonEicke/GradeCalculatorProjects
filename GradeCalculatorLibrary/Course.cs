@@ -11,14 +11,14 @@
             Categories = new List<Category>();
         }
 
-        public void SetLetterGrade(LetterGradeSet letterGrades)
-        {
-            LetterGrades = letterGrades;
-        }
-
         public void SetCourseName(string name)
         {
             CourseName = name;
+        }
+
+        public void SetLetterGrade(LetterGradeSet letterGrades)
+        {
+            LetterGrades = letterGrades;
         }
 
         public void AddCategory(Category category)
@@ -28,6 +28,9 @@
 
         public void RemoveCategory(int idx)
         {
+            if (idx < 0 || idx > Categories.Count)
+                return;
+
             Categories.RemoveAt(idx);
         }
     }
