@@ -47,6 +47,7 @@ The grade calculator library is a custom library that contains both a course tem
 
 ### Grade Calculator App
 <img width="1423" height="732" alt="GradeCalculatorApp" src="https://github.com/user-attachments/assets/b1f7aff2-8c80-4fc5-94ee-39f13dd2b138" />
+
 The grade calculator app is a GUI version of the grade calculator built in Avalonia UI. The app is built to work on all platforms. The UI is simple and easy to use for anyone. The app comes with both a template builder and a course calculator that neatly layout data. The app also contains full error checking to let the user know exactly what they did wrong and prevent errors in template file generation or inputs for scores along with other issues. For more information refer to the wiki page for the app: [<ins>Wiki</ins>](https://github.com/HudsonEicke/GradeCalculatorProjects/wiki/Grade-Calculator-App)
 
 ### Grade Calculator Terminal
